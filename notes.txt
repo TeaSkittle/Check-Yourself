@@ -1,0 +1,34 @@
+  Pitch Notes
+---------------
+- Talk about a quick history of chess and computers
+  - Ken Thomson
+  - IBM Deep Blue
+  - Knight's Tour
+  
+- Talk about my history with chess, to explain why I am persuing this
+  - Compteted in open brackets
+  - Competed in scholastic tournaments
+  - Show/link to my chess variant on my website
+  
+- Use power point for visual references
+  - Show the over complexity of Fritz 17
+  - Show Zen Chess to give more of an idea of the project
+  - Spice up with some fun memes and humor
+    - https://i.kym-cdn.com/photos/images/original/001/720/095/609.jpg
+    - Perfect time to use the: Outstanding Move! meme
+  
+- Things to figure out
+  - Name of the project
+  
+- The five W's
+  - Who: For the casual chess player
+  - What: A simple chess puzzle game
+  - When: Complete by 2/17/21
+  - Where: Here at Soutwst Tech
+  - Why: It's a passion project for combining chess and programming
+  
+- Give some examples, can easily be done with powerpoint slides
+  - Use https://www.chess.com/analysis to create boards
+  - Make fun and easy ones, examples:
+    - Smothered mate
+    - Mate by promotion
