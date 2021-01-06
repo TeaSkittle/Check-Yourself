@@ -1,3 +1,12 @@
+  Meetings
+------------
+1/7  @ 11:00 - Project proposal
+1/15 @ 10:00 - First check in
+1/22 @ 10:00 - Mock interview
+1/29 @ 10:00 - Second check in
+2/??         - Mock interview with industry
+2/17 @ 11:00 - Final presentation
+ 
   Pitch Notes
 ---------------
 - Talk about a quick history of chess and computers
