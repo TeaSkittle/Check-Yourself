@@ -33,7 +33,7 @@
   - Who: For the casual chess player
   - What: A simple chess puzzle game
   - When: Complete by 2/17/21
-  - Where: Here at Soutwest Tech
+  - Where: Here at Southwest Tech
   - Why: It's a passion project for combining chess and programming
   
 - Give some examples, can easily be done with powerpoint slides
