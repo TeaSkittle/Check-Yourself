@@ -1,4 +1,4 @@
-# :suspect: Check Yourself
+# ![queen](blackqueen.png) Check Yourself
 
 > *Check Yourself* is a simple and minimalistic chess puzzle game where the player solves mate in one problems
 
