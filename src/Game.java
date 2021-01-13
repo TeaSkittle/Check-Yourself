@@ -20,6 +20,7 @@ package src;
 
 // Why is this imported????
 //import javax.swing.text.*;
+import java.util.*;
 
 public class Game {
         /*
@@ -35,30 +36,30 @@ public class Game {
         ====================
         */
         private static int[][] position;
-        private final static int W_PAWN   = 11;
-        private final static int W_KNIGHT = 12;
-        private final static int W_BISHOP = 13;
-        private final static int W_ROOK   = 14;
-        private final static int W_QUEEN  = 15;
-        private final static int W_KING   = 16;
-        private final static int B_PAWN   = 21;
-        private final static int B_KNIGHT = 22;
-        private final static int B_BISHOP = 23;
-        private final static int B_ROOK   = 24;
-        private final static int B_QUEEN  = 25;
-        private final static int B_KING   = 26;
-        private static String W_PAWN_S   = "\u2659";
-        private static String W_KNIGHT_S = "\u2658";
-        private static String W_BISHOP_S = "\u2657";
-        private static String W_ROOK_S   = "\u2656";
-        private static String W_QUEEN_S  = "\u2655";
-        private static String W_KING_S   = "\u2654";
-        private static String B_PAWN_S   = "\u265F";
-        private static String B_KNIGHT_S = "\u265E";
-        private static String B_BISHOP_S = "\u265D";
-        private static String B_ROOK_S   = "\u265C";
-        private static String B_QUEEN_S  = "\u265B";
-        private static String B_KING_S   = "\u265A";
+        private final static int W_PAWN   = 1;
+        private final static int W_KNIGHT = 2;
+        private final static int W_BISHOP = 3;
+        private final static int W_ROOK   = 4;
+        private final static int W_QUEEN  = 5;
+        private final static int W_KING   = 6;
+        private final static int B_PAWN   = -1;
+        private final static int B_KNIGHT = -2;
+        private final static int B_BISHOP = -3;
+        private final static int B_ROOK   = -4;
+        private final static int B_QUEEN  = -5;
+        private final static int B_KING   = -6;
+        private final static String W_PAWN_S   = "\u2659";
+        private final static String W_KNIGHT_S = "\u2658";
+        private final static String W_BISHOP_S = "\u2657";
+        private final static String W_ROOK_S   = "\u2656";
+        private final static String W_QUEEN_S  = "\u2655";
+        private final static String W_KING_S   = "\u2654";
+        private final static String B_PAWN_S   = "\u265F";
+        private final static String B_KNIGHT_S = "\u265E";
+        private final static String B_BISHOP_S = "\u265D";
+        private final static String B_ROOK_S   = "\u265C";
+        private final static String B_QUEEN_S  = "\u265B";
+        private final static String B_KING_S   = "\u265A";
         private static String fenPosition; // the string of characters showing the position of the pieces in FEN
         private static String turn;           // 0 = white, 1 = black
         private static String castle;         // 0 = white, 1 = black, 2 = neither can castle
@@ -144,45 +145,168 @@ public class Game {
                 enPassant = splitString[ 3 ];
                 halfMove = Integer.parseInt( splitString[ 4 ] );
                 fullMove = Integer.parseInt( splitString[ 5 ] );
-                
-                // Turn into int[] startingArray
+
+                ArrayList<Integer> list = new ArrayList<Integer>();
                 for ( int i = 0; i < splitString[ 0 ].length(); i++ ) {
                     switch( splitString[ 0 ].charAt( i ) ){
-                        // Lowercase = black, uppercase = white
-                        case 'P': startingArray[ i ] = W_PAWN;  break;
-                        case 'N': startingArray[ i ] = W_KNIGHT;  break;
-                        case 'B': startingArray[ i ] = W_BISHOP;  break;
-                        case 'R': startingArray[ i ] = W_ROOK;  break;
-                        case 'Q': startingArray[ i ] = W_QUEEN;  break;
-                        case 'K': startingArray[ i ] = W_KNIGHT;  break;
-                        case 'p': startingArray[ i ] = B_PAWN;  break;
-                        case 'n': startingArray[ i ] = B_KNIGHT;  break;
-                        case 'b': startingArray[ i ] = B_BISHOP;  break;
-                        case 'r': startingArray[ i ] = B_ROOK; break;
-                        case 'q': startingArray[ i ] = B_QUEEN; break;
-                        case 'k': startingArray[ i ] = B_QUEEN; break;
+                        case 'P': list.add( W_PAWN );  break;
+                        case 'N': list.add( W_KNIGHT );  break;
+                        case 'B': list.add( W_BISHOP);  break;
+                        case 'R': list.add( W_ROOK);  break;
+                        case 'Q': list.add( W_QUEEN);  break;
+                        case 'K': list.add( W_KING );  break;
+                        case 'p': list.add( B_PAWN);  break;
+                        case 'n': list.add( B_KNIGHT);  break;
+                        case 'b': list.add( B_BISHOP);  break;
+                        case 'r': list.add( B_ROOK); break;
+                        case 'q': list.add( B_QUEEN); break;
+                        case 'k': list.add( B_KING); break;
                         default:
                             char temp = splitString[ 0 ].charAt( i );
                             int tempInt = temp - '0'; // -'0' needed here due to ASCII stuff
                             startingArray[ i ] = tempInt;
-                            //i += startingArray[ i ];
+                            list.add( tempInt );
                             break;
                     } 
                 }
-                
-                //
-                // TODO: Turn int[] into int[][] with proper empty space
-                //
-                int x = 0;
-                for ( int i = 0; i < 8; i++ ) {
-                    for ( int j = 0; j < 8; j++ ) {
-                        finalArray[ i ][ j ] = startingArray[ x++ ];
+                // Create array list, then add blank elements into it and turn into int[][]
+                System.out.println( "start list: " );
+                for ( int i : list ){
+                    System.out.print( i + " " );
+                }
+                ArrayList<Integer> newList = new ArrayList<Integer>( list );
+                int numberOfBlanks = 0;
+                for ( int i = 0; i < list.size() - 1; i++ ) {
+                    if ( list.get( i ) < 9 ){
+                        numberOfBlanks += list.get(i);
+                        for ( int j = 0; j < list.get( i ); j++ ) {
+                            newList.set( i, 0 );
+                        }
                     }
                 }
                 
+                System.out.println( "\nnumberOfBlanks: " + numberOfBlanks );
+                
+                System.out.println( "blank count list: " );
+                for ( int i : newList ){
+                    System.out.print( i + " " );
+                }
+                
+                // Switch back to Array
+                Object[] objects = newList.toArray();
+                int newArray[] = new int[ 64 ];
+                for ( int i = 0; i < objects.length; i++ ) { newArray[ i ] = ( int )objects[ i ]; }
+                // Turn into 2D Array
+                int x = 0;
+                for ( int i = 0; i < 8; i++ ) {
+                    for ( int j = 0; j < 8; j++ ) { finalArray[ i ][ j ] = newArray[ x++ ]; }
+                }
+                //
                 // For debugging
-                PrintPosition( finalArray );
+                //
+                System.out.println( "\nend list: " );
+                for ( int i : newList ){
+                    System.out.print( i + " " );
+                }
+                System.out.println( "" );
+                System.out.println( "newArray: " );
+                for ( int i : newArray ) {
+                    System.out.print( i + " " );
+                }
+                System.out.println( "\nlist size: " + newList.size() );
+                PrintPosition_r( finalArray, 0, 0 );
+                //PrintPosition( finalArray );
+                
                 //return finalArray;
+        }
+
+        //public static int[][] FenParser( String fenString ){
+        public static int[][] FenParser_r( String inStr ) {
+            /*int[] startingArray = new int[ 64 ];
+            int[][] board = new int[ 8 ][ 8 ];
+            fenString = fenString.replaceAll( "/", "" );
+            String[] splitString = fenString.split( "\\s+" );
+            fenPosition = splitString[ 0 ];
+            turn = splitString[ 1 ];
+            castle = splitString[ 2 ];
+            enPassant = splitString[ 3 ];
+            halfMove = Integer.parseInt( splitString[ 4 ] );
+            fullMove = Integer.parseInt( splitString[ 5 ] );
+                
+            // Turn into int[] startingArray
+            for ( int i = 0; i < splitString[ 0 ].length(); i++ ) {
+                switch( splitString[ 0 ].charAt( i ) ){
+                    // Lowercase = black, uppercase = white
+                    case 'P': startingArray[ i ] = W_PAWN;  break;
+                    case 'N': startingArray[ i ] = W_KNIGHT;  break;
+                    case 'B': startingArray[ i ] = W_BISHOP;  break;
+                    case 'R': startingArray[ i ] = W_ROOK;  break;
+                    case 'Q': startingArray[ i ] = W_QUEEN;  break;
+                    case 'K': startingArray[ i ] = W_KNIGHT;  break;
+                    case 'p': startingArray[ i ] = B_PAWN;  break;
+                    case 'n': startingArray[ i ] = B_KNIGHT;  break;
+                    case 'b': startingArray[ i ] = B_BISHOP;  break;
+                    case 'r': startingArray[ i ] = B_ROOK; break;
+                    case 'q': startingArray[ i ] = B_QUEEN; break;
+                    case 'k': startingArray[ i ] = B_QUEEN; break;
+                    default:
+                        char temp = splitString[ 0 ].charAt( i );
+                        int tempInt = temp - '0'; // -'0' needed here due to ASCII stuff
+                        startingArray[ i ] = tempInt;
+                        break;
+                    } 
+                }
+                */
+                //
+                // https://github.com/njkevlani/FEN-Parser/blob/master/src/Main.java
+                //
+                String strg[] = inStr.split(" ");           
+                String temp = strg[0];
+                String tp = strg[1];
+                char bw = tp.charAt(0);                        
+                String temp2[] = temp.split("/");
+                            
+                int board[][] = new int[8][8];  
+                PrintPosition( board );          
+                for(int i=0;i<8;i++){
+                    String str = temp2[i];
+                    int k = 0;
+                    for(int j=0;j<str.length();j++){                   
+                        int code = getCode(str.charAt(j));                                                                               
+                        if(code == 0){
+                            int num = Integer.parseInt(""+str.charAt(j));
+                            for(int x=0;x<num;x++){
+                                board[7-i][k] = 0;
+                                k++;
+                            }                          
+                        } else {                        
+                            board[7-i][k] = code;
+                            k++;
+                        }
+                    }                
+                }
+                PrintPosition_r( board, 0, 0 );
+                PrintPosition( board );
+                return board;  
+        }
+        
+        static int getCode ( char c ) {
+            // Lowercase = black, uppercase = white
+            int piece = 0;
+            switch( c ){
+                case 'P': piece = W_PAWN;  break;
+                case 'N': piece = W_KNIGHT;  break;
+                case 'B': piece = W_BISHOP;  break;
+                case 'R': piece = W_ROOK;  break;
+                case 'Q': piece = W_QUEEN;  break;
+                case 'K': piece = W_KNIGHT;  break;
+                case 'p': piece = B_PAWN;  break;
+                case 'n': piece = B_KNIGHT;  break;
+                case 'b': piece = B_BISHOP;  break;
+                case 'r': piece = B_ROOK; break;
+                case 'q': piece = B_QUEEN; break;
+                case 'k': piece = B_QUEEN; break;
+            } return piece;
         }
 
         /*
@@ -210,13 +334,15 @@ public class Game {
                         //
                         // Debug code goes here
                         //
-                        FenParser( startingPosition );
+                        String test = "8/1k6/6q1/8/8/5K2/3Q4/8 w - - 0 1";
+                        //FenParser( startingPosition );
+                        FenParser_r( test );
                         System.out.println( "\nfenPosition: " + fenPosition );
-                        //System.out.println( "turn: " + turn );
-                        //System.out.println( "castle: " + castle );
-                        //System.out.println( "enPassant: " + enPassant );
-                        //System.out.println( "halfMove: " + halfMove );
-                        //System.out.println( "fullMove: " + fullMove );
+                        System.out.println( "turn: " + turn );
+                        System.out.println( "castle: " + castle );
+                        System.out.println( "enPassant: " + enPassant );
+                        System.out.println( "halfMove: " + halfMove );
+                        System.out.println( "fullMove: " + fullMove );
                         
                         //PrintPosition_r( position, 0, 0);
                         //PrintPosition( position );
