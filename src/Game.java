@@ -18,20 +18,10 @@ Notes:
 package src;
 
 import java.util.*;
+import java.lang.*;
 
 public class Game {
-        /*
-        ====================
-         Debugging Variables
-        ====================
-        */
         private static int DEBUG;
-        private final static String startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        /*
-        ====================
-         Variables
-        ====================
-        */
         private static int board[][] = new int[ 8 ][ 8 ]; 
         private final static int W_PAWN   = 11;
         private final static int W_KNIGHT = 12;
@@ -71,7 +61,7 @@ public class Game {
         */
         public Game(){}
         public Game( int[][] board ){
-                this.board = board;
+            this.board = board;
         }
         /*
         ====================
@@ -119,14 +109,14 @@ public class Game {
         }
         /*
         ====================
-        getPiece
-         Get int value of a piece from a FEN string, to be used in fenParser.
+        GetPiece
+         Get int value of a piece from a FEN string.
         ====================
         */
-        static int getPiece ( char c ) {
+        public static int GetPiece ( char c ) {
             // Lowercase = black, uppercase = white
-            // These have to be reversed to print correctly for some reason
-            int piece;
+            // These have to be reversed to print correctly for some reason for the parser?!?!?
+            int piece = 0;
             switch( c ){
                 case 'p': piece = W_PAWN;   break;
                 case 'n': piece = W_KNIGHT; break;
@@ -140,8 +130,24 @@ public class Game {
                 case 'R': piece = B_ROOK;   break;
                 case 'Q': piece = B_QUEEN;  break;
                 case 'K': piece = B_KING;   break;
-                default:  piece = 0;        break;
+                default: break;
             } return piece;
+        }
+        /*
+        ====================
+        getPosition
+         Split a FEN string, assign elements to variable and return board position element of the string.
+        ====================
+        */
+        public static String[] getPosition( String fenString ){
+            String splitString[] = fenString.split(" ");           
+            fenPosition          = splitString[ 0 ];
+            turn                 = splitString[ 1 ].charAt(0);
+            castle               = splitString[ 2 ];
+            enPassant            = splitString[ 3 ];
+            halfMove             = Integer.parseInt( splitString[ 4 ]);
+            fullMove             = Integer.parseInt( splitString[ 5 ]);
+            return fenPosition.split("/");
         }
         /*
         ====================
@@ -154,19 +160,12 @@ public class Game {
         ====================
         */
         public static int[][] FenParser( String fenString ) {
-            String splitString[] = fenString.split(" ");           
-            fenPosition = splitString[ 0 ];
-            turn = splitString[ 1 ].charAt(0);
-            castle = splitString[ 2 ];
-            enPassant = splitString[ 3 ];
-            halfMove = Integer.parseInt( splitString[ 4 ]);
-            fullMove = Integer.parseInt( splitString[ 5 ]);
-            String temp2[] = fenPosition.split("/");
-            for ( int i = 0;i < 8; i++ ) {
-                String str = temp2[ i ];
+            String temp[] = getPosition( fenString );
+            for ( int i = 0; i < 8; i++ ) {
+                String str = temp[ i ];
                 int k = 0;
                 for ( int j = 0; j < str.length(); j++ ) {                   
-                    int code = getPiece( str.charAt( j ));                                                                               
+                    int code = GetPiece( str.charAt( j ));                                                                               
                     if ( code == 0 ) {
                         int num = Integer.parseInt( ""+str.charAt( j ));
                         for ( int x = 0; x < num; x++) {
@@ -178,14 +177,36 @@ public class Game {
                         k++;
                     }
                 }                
-            } Collections.reverse( Arrays.asList( board )); // needs to be reveresed before returning
+            } Collections.reverse( Arrays.asList( board )); // needs to be reversed before returning
             return board;  
         }
         /*
         ====================
+        GetInput
+         Prompt for user to input using a Scanner object and return as a lowercase String.
+        ====================
+        */
+        public static String GetInput() {
+            Scanner input = new Scanner( System.in );
+            System.out.print( "> " );
+            return input.nextLine().toLowerCase();
+        }
+        /*
+        ====================
+        InputLoop
+         Simple while loop that repeats wating for user input, this is sort of a 'game' loop.
+        ====================
+        */
+        public static void InputLoop( ){
+            while ( true ) {
+                String input = GetInput();
+                if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )) { break; }
+            }
+        }
+        /*
+        ====================
         Main
-         Main method to run as a stand alone program and 
-         used for testing without a GUI.
+         Main method to run as a stand alone program and used for testing without a GUI.
         ====================
         */
         public static void main( String[] args ) {
@@ -196,26 +217,18 @@ public class Game {
                 //
                 // Debug code goes here
                 //
-                int[][] position = { 
-                    { B_ROOK, B_KNIGHT, B_BISHOP, B_QUEEN, B_KING, B_BISHOP, B_KNIGHT, B_ROOK }, 
-                    { B_PAWN, B_PAWN, B_PAWN, B_PAWN, B_PAWN, B_PAWN, B_PAWN, B_PAWN },
-                    { 0, 0, 0, 0, 0, 0, 0, 0 },
-                    { 0, 0, 0, 0, 0, 0, 0, 0 },
-                    { 0, 0, 0, 0, 0, 0, 0, 0 },
-                    { 0, 0, 0, 0, 0, 0, 0, 0 },
-                    { W_PAWN, W_PAWN, W_PAWN, W_PAWN, W_PAWN, W_PAWN, W_PAWN, W_PAWN },
-                    { W_ROOK, W_KNIGHT, W_BISHOP, W_QUEEN, W_KING, W_BISHOP, W_KNIGHT, W_ROOK }
-                };
-                String test = "4rqk1/1b5p/6pb/1Pn2p2/1QP2N2/pp3PP1/5BBP/3R2K1 b - - 1 34";
+                String test = "3k4/p2B2rp/3p4/1p3Q2/3q4/2R3P1/PP3P1P/6K1 w - - 1 33";
                 int[][] fenString = FenParser( test );
                 PrintPosition_r( fenString, 0, 0 );
-                PrintPosition( position );
+                PrintPosition( fenString );
                 System.out.println( "\nfenPosition: " + fenPosition );
                 System.out.println( "turn: " + turn );
                 System.out.println( "castle: " + castle );
                 System.out.println( "enPassant: " + enPassant );
                 System.out.println( "halfMove: " + halfMove );
                 System.out.println( "fullMove: " + fullMove );
+                System.out.print( "\n" );
+                InputLoop();
                 //
                 // End debug code
                 //
