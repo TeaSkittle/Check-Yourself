@@ -3,10 +3,13 @@
 By: Travis Dowd
 Date: 1-27-2021
 
-This file is for the core logic of the game, meant to be ran without GUI
-and to be used in a GUI program. This should run the entire game as a TUI
-program first, then once that is working move on to creating a GUI with this
-class file used as the core game logic.
+This file is for the core logic of the game, meant to be ran without GUI and to be used in a GUI program. 
+This should run the entire game as a TUI program first, then once that is working move on to creating a 
+GUI with this class file used as the core game logic.
+
+Todo:
+    - Fix the reversing of the ordering with the parser, maybe try reversing the string at the start
+    - Figure out what database will be best for holding the FEN strings and corect moves ( hash table makes sense here )
 
 Notes:
     - Will try to avoid void methods
@@ -19,40 +22,42 @@ package src;
 
 import java.util.*;
 import java.lang.*;
+import java.io.*;
 
 public class Game {
-        private static int DEBUG;
-        private static int board[][] = new int[ 8 ][ 8 ]; 
-        private final static int W_PAWN   = 11;
-        private final static int W_KNIGHT = 12;
-        private final static int W_BISHOP = 13;
-        private final static int W_ROOK   = 14;
-        private final static int W_QUEEN  = 15;
-        private final static int W_KING   = 16;
-        private final static int B_PAWN   = 21;
-        private final static int B_KNIGHT = 22;
-        private final static int B_BISHOP = 23;
-        private final static int B_ROOK   = 24;
-        private final static int B_QUEEN  = 25;
-        private final static int B_KING   = 26;
-        private final static String W_PAWN_S   = "\u2659";
-        private final static String W_KNIGHT_S = "\u2658";
-        private final static String W_BISHOP_S = "\u2657";
-        private final static String W_ROOK_S   = "\u2656";
-        private final static String W_QUEEN_S  = "\u2655";
-        private final static String W_KING_S   = "\u2654";
-        private final static String B_PAWN_S   = "\u265F";
-        private final static String B_KNIGHT_S = "\u265E";
-        private final static String B_BISHOP_S = "\u265D";
-        private final static String B_ROOK_S   = "\u265C";
-        private final static String B_QUEEN_S  = "\u265B";
-        private final static String B_KING_S   = "\u265A";
-        private static String fenPosition; // the string of characters showing the position of the pieces in FEN
-        private static char turn;          // 0 = white, 1 = black
-        private static String castle;      // 0 = white, 1 = black, 2 = neither can castle
-        private static String enPassant;   // which square can be targetd with an En Passant ( ex "e3" )
-        private static int halfMove;       // Deals with 50-move rule, will most likely not be used in this program 
-        private static int fullMove;       // Incremented after every one of black's moves, will most likely not be used
+                                                            // Int values for the pieces >= 10 for white, >= 20 for black
+        private final static int W_PAWN   = 11;             // White Pawn
+        private final static int W_KNIGHT = 12;             // White Knight
+        private final static int W_BISHOP = 13;             // White Bishop
+        private final static int W_ROOK   = 14;             // White Rook
+        private final static int W_QUEEN  = 15;             // White Queen
+        private final static int W_KING   = 16;             // White King
+        private final static int B_PAWN   = 21;             // Black Pawn
+        private final static int B_KNIGHT = 22;             // Black Knight
+        private final static int B_BISHOP = 23;             // Black Bishop
+        private final static int B_ROOK   = 24;             // Black Rook
+        private final static int B_QUEEN  = 25;             // Black Queen
+        private final static int B_KING   = 26;             // Black King         
+                                                            // ASCII Codes for the chess peices
+        private final static String W_PAWN_S   = "\u2659";  // White Pawn
+        private final static String W_KNIGHT_S = "\u2658";  // White Knight
+        private final static String W_BISHOP_S = "\u2657";  // White Bishop
+        private final static String W_ROOK_S   = "\u2656";  // White Rook
+        private final static String W_QUEEN_S  = "\u2655";  // White Queen
+        private final static String W_KING_S   = "\u2654";  // White King
+        private final static String B_PAWN_S   = "\u265F";  // Black Pawn
+        private final static String B_KNIGHT_S = "\u265E";  // Black Knight
+        private final static String B_BISHOP_S = "\u265D";  // Black Bishop
+        private final static String B_ROOK_S   = "\u265C";  // Back Rook
+        private final static String B_QUEEN_S  = "\u265B";  // Black Queen
+        private final static String B_KING_S   = "\u265A";  // Black King
+        private static String fenPosition;                  // the string of characters showing the position of the pieces in FEN
+        private static char   turn;                         // 0 = white, 1 = black
+        private static String castle;                       // 0 = white, 1 = black, 2 = neither can castle
+        private static String enPassant;                    // which square can be targetd with an En Passant ( ex "e3" )
+        private static int    halfMove;                     // Deals with 50-move rule, will most likely not be used in this program 
+        private static int    fullMove;                     // Incremented after every one of black's moves, will most likely not be used
+        private static String correctMove;                  // the square for checkmate, for example: "e5"
         /*
         ====================
         Constructors
@@ -61,7 +66,7 @@ public class Game {
         */
         public Game(){}
         public Game( int[][] board ){
-            this.board = board;
+            //this.board = board;
         }
         /*
         ====================
@@ -74,8 +79,8 @@ public class Game {
             for ( int i = 0; i < 8; i++ ) {
                 for ( int j = 0; j < 8; j++ ) {
                     System.out.print( array[ i ][ j ] + " " );
-                    if ( array[ i ][ j ] < 10 ){ System.out.printf( " " ); }
-                    if ( j == 7 ){ System.out.printf( "\n" ); }
+                    if ( array[ i ][ j ] < 10 ) { System.out.printf( " " ); }
+                    if ( j == 7 ) { System.out.printf( "\n" ); }
                 }
             }
         }
@@ -87,8 +92,13 @@ public class Game {
         ====================
         */
         public static int PrintPosition_r( int[][] array, int i, int j ){
-            if( j >= 8 ){ return 0; }
-            if( i >= 8 ){ return 1; }
+            if ( j >= 8 ) { return 0; }
+            if ( i >= 8 ) { 
+                System.out.println( "  -----------------" );
+                System.out.println( "    a b c d e f g h" ); 
+                return 1; 
+            } 
+            if ( j == 0 ) { System.out.print( 8 - i + " | "); }
             switch ( array[ i ][ j ] ) {
                 case W_PAWN:   System.out.print( W_PAWN_S   + " " ); break; 
                 case W_KNIGHT: System.out.print( W_KNIGHT_S + " " ); break;
@@ -103,7 +113,7 @@ public class Game {
                 case B_QUEEN:  System.out.print( B_QUEEN_S  + " " ); break;
                 case B_KING:   System.out.print( B_KING_S   + " " ); break;
                 default: System.out.print( "- " ); break;
-            } if ( j == 7 ){ System.out.printf( "\n" ); }
+            } if ( j == 7 ) { System.out.printf( "\n" ); }
             if ( PrintPosition_r( array, i, j + 1 ) == 1 ) { return 1; }
             return PrintPosition_r( array, i + 1, 0 );
         }
@@ -113,7 +123,7 @@ public class Game {
          Get int value of a piece from a FEN string.
         ====================
         */
-        public static int GetPiece ( char c ) {
+        public static int GetPiece( char c ){
             // Lowercase = black, uppercase = white
             // These have to be reversed to print correctly for some reason for the parser?!?!?
             int piece = 0;
@@ -130,24 +140,25 @@ public class Game {
                 case 'R': piece = B_ROOK;   break;
                 case 'Q': piece = B_QUEEN;  break;
                 case 'K': piece = B_KING;   break;
-                default: break;
             } return piece;
         }
         /*
         ====================
-        getPosition
+        GetPosition
          Split a FEN string, assign elements to variable and return board position element of the string.
         ====================
         */
-        public static String[] getPosition( String fenString ){
-            String splitString[] = fenString.split(" ");           
+        public static String[] GetPosition( String fenString ){
+            String[] splitString = fenString.split(" ");           
             fenPosition          = splitString[ 0 ];
-            turn                 = splitString[ 1 ].charAt(0);
+            turn                 = splitString[ 1 ].charAt( 0 );
             castle               = splitString[ 2 ];
             enPassant            = splitString[ 3 ];
             halfMove             = Integer.parseInt( splitString[ 4 ]);
             fullMove             = Integer.parseInt( splitString[ 5 ]);
-            return fenPosition.split("/");
+            String[] finalString = fenPosition.split( "/" );
+            Collections.reverse( Arrays.asList( finalString ));
+            return finalString;
         }
         /*
         ====================
@@ -159,26 +170,26 @@ public class Game {
          Parser based on https://github.com/njkevlani/FEN-Parser/blob/master/src/Main.java 
         ====================
         */
-        public static int[][] FenParser( String fenString ) {
-            String temp[] = getPosition( fenString );
+        public static int[][] FenParser( String fenString ){
+            int board[][] = new int[ 8 ][ 8 ]; 
+            String strArray[] = GetPosition( fenString );
             for ( int i = 0; i < 8; i++ ) {
-                String str = temp[ i ];
+                String str = strArray[ i ];
                 int k = 0;
                 for ( int j = 0; j < str.length(); j++ ) {                   
                     int code = GetPiece( str.charAt( j ));                                                                               
                     if ( code == 0 ) {
                         int num = Integer.parseInt( ""+str.charAt( j ));
-                        for ( int x = 0; x < num; x++) {
-                            board[ 7-i ][ k ] = 0;
+                        for ( int x = 0; x < num; x++ ) {
+                            board[ 7 - i ][ k ] = 0;
                             k++;
                         }                          
                     } else {                        
-                        board[ 7-i ][ k ] = code;
+                        board[ 7 - i ][ k ] = code;
                         k++;
                     }
                 }                
-            } Collections.reverse( Arrays.asList( board )); // needs to be reversed before returning
-            return board;  
+            } return board;  
         }
         /*
         ====================
@@ -186,10 +197,37 @@ public class Game {
          Prompt for user to input using a Scanner object and return as a lowercase String.
         ====================
         */
-        public static String GetInput() {
+        public static String GetInput(){
             Scanner input = new Scanner( System.in );
             System.out.print( "> " );
             return input.nextLine().toLowerCase();
+        }
+        /*
+        ====================
+        GetMove
+         Turn string for correct move into int[].
+        ====================
+        */
+        public static int[] GetMove( String input ){
+            int rank = 0;
+            int file = 0;
+            switch ( input.charAt( 0 )) {
+                case 'a': file = 0; break;
+                case 'b': file = 1; break;
+                case 'c': file = 2; break;
+                case 'd': file = 3; break;
+                case 'e': file = 4; break;
+                case 'f': file = 5; break;
+                case 'g': file = 6; break;
+                case 'h': file = 7; break;
+                default: System.out.println( "Please enter a proper value..." ); break;
+            } try { rank = ( input.charAt( 1 ) - '0' ) - 1; } 
+            catch ( StringIndexOutOfBoundsException e ) { e.printStackTrace(); }
+            int[] move = new int[ 2 ];
+            move[ 0 ] = file;
+            move[ 1 ] = rank;
+            //System.out.println( "File: " + file + "\nRank: " + rank + "\nmove: " + move[ 0 ] + move[ 1 ]);
+            return move;
         }
         /*
         ====================
@@ -197,10 +235,16 @@ public class Game {
          Simple while loop that repeats wating for user input, this is sort of a 'game' loop.
         ====================
         */
-        public static void InputLoop( ){
+        public static void InputLoop(){
             while ( true ) {
                 String input = GetInput();
                 if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )) { break; }
+                GetMove( input );
+                if ( input.equals( correctMove.toLowerCase())) {
+                    System.out.println( "Correct!\n " );
+                } else {
+                    System.out.println( "Try again...\n" );
+                }
             }
         }
         /*
@@ -210,16 +254,16 @@ public class Game {
         ====================
         */
         public static void main( String[] args ) {
-            DEBUG = 1;
+            int DEBUG = 1;
+            String test = "1Q6/5pk1/2p3p1/1p2N2p/1b5P/1bn5/r5P1/2K5 b - - 15 41"; //https://www.chessgames.com/perl/chessgame?gid=1008361
+            correctMove = "b3";
+            int[][] fenString = FenParser( test );           
             if ( DEBUG == 1 ){
                 System.out.print( "DEBUG INFO:\n"   );
                 System.out.print( "===========\n\n" );
                 //
                 // Debug code goes here
-                //
-                String test = "3k4/p2B2rp/3p4/1p3Q2/3q4/2R3P1/PP3P1P/6K1 w - - 1 33";
-                int[][] fenString = FenParser( test );
-                PrintPosition_r( fenString, 0, 0 );
+                //     
                 PrintPosition( fenString );
                 System.out.println( "\nfenPosition: " + fenPosition );
                 System.out.println( "turn: " + turn );
@@ -228,11 +272,17 @@ public class Game {
                 System.out.println( "halfMove: " + halfMove );
                 System.out.println( "fullMove: " + fullMove );
                 System.out.print( "\n" );
-                InputLoop();
                 //
                 // End debug code
                 //
                 System.out.print( "\n===========\n\n" );
             }
+
+            PrintPosition_r( fenString, 0, 0 );
+            
+            if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
+            if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
+            System.out.println( " Which square is checkmate?" );
+            InputLoop();
         }
 }
