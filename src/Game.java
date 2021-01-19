@@ -7,13 +7,9 @@ This file is for the core logic of the game, meant to be ran without GUI and to 
 This should run the entire game as a TUI program first, then once that is working move on to creating a 
 GUI with this class file used as the core game logic.
 
-Todo:
-    - Fix the reversing of the ordering with the parser, maybe try reversing the string at the start
-    - Figure out what database will be best for holding the FEN strings and corect moves ( hash table makes sense here )
-
 Notes:
-    - Will try to avoid void methods
-    - Will try and use recursion where possible
+    - Will try to avoid using void methods
+    - Use recursion where possible and helpful
     - Using switch/case over multiple if/else when needed
     - Following John Carmack's DOOM 3 code style: https://fabiensanglard.net/fd_proxy/doom3/CodeStyleConventions.pdf
 =========================================
@@ -58,6 +54,11 @@ public class Game {
         private static int    halfMove;                     // Deals with 50-move rule, will most likely not be used in this program 
         private static int    fullMove;                     // Incremented after every one of black's moves, will most likely not be used
         private static String correctMove;                  // the square for checkmate, for example: "e5"
+        private static int problemNumber;                   // Which chess problem rhe user is currently on
+        
+        
+        private static Problem problem = new Problem();
+        
         /*
         ====================
         Constructors
@@ -205,23 +206,24 @@ public class Game {
         /*
         ====================
         GetMove
-         Turn string for correct move into int[].
+         Turn string for correct move into int[]. 
+         *** Not being used *** 
         ====================
         */
         public static int[] GetMove( String input ){
             int rank = 0;
             int file = 0;
             switch ( input.charAt( 0 )) {
-                case 'a': file = 0; break;
-                case 'b': file = 1; break;
-                case 'c': file = 2; break;
-                case 'd': file = 3; break;
-                case 'e': file = 4; break;
-                case 'f': file = 5; break;
-                case 'g': file = 6; break;
-                case 'h': file = 7; break;
+                case 'a': file = 1; break;
+                case 'b': file = 2; break;
+                case 'c': file = 3; break;
+                case 'd': file = 4; break;
+                case 'e': file = 5; break;
+                case 'f': file = 6; break;
+                case 'g': file = 7; break;
+                case 'h': file = 8; break;
                 default: System.out.println( "Please enter a proper value..." ); break;
-            } try { rank = ( input.charAt( 1 ) - '0' ) - 1; } 
+            } try { rank = ( input.charAt( 1 ) - '0' ); } 
             catch ( StringIndexOutOfBoundsException e ) { e.printStackTrace(); }
             int[] move = new int[ 2 ];
             move[ 0 ] = file;
@@ -235,16 +237,21 @@ public class Game {
          Simple while loop that repeats wating for user input, this is sort of a 'game' loop.
         ====================
         */
-        public static void InputLoop(){
+        public static void InputLoop( String move ){
             while ( true ) {
                 String input = GetInput();
-                if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )) { break; }
-                GetMove( input );
-                if ( input.equals( correctMove.toLowerCase())) {
-                    System.out.println( "Correct!\n " );
-                } else {
-                    System.out.println( "Try again...\n" );
+                if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )) { System.exit( 0 ); }
+                try {
+                    if ( input.equals( move )) {
+                        System.out.println( "Correct!\n " );
+                        break;
+                    } else {
+                        System.out.println( "Try again...\n" );
+                    }
+                } catch ( NullPointerException e ) {
+                    e.printStackTrace();
                 }
+                
             }
         }
         /*
@@ -253,17 +260,23 @@ public class Game {
          Main method to run as a stand alone program and used for testing without a GUI.
         ====================
         */
-        public static void main( String[] args ) {
+        public static void main( String[] args ){
             int DEBUG = 1;
-            String test = "1Q6/5pk1/2p3p1/1p2N2p/1b5P/1bn5/r5P1/2K5 b - - 15 41"; //https://www.chessgames.com/perl/chessgame?gid=1008361
-            correctMove = "b3";
-            int[][] fenString = FenParser( test );           
+            int problemNumber = 1;
+            String position = problem.ReadPosition( problemNumber );
+            String correctMove = problem.ReadMove( problemNumber );
+            correctMove = problem.ReadSquare( correctMove );
+            int[][] fenString = FenParser( position );           
             if ( DEBUG == 1 ){
                 System.out.print( "DEBUG INFO:\n"   );
                 System.out.print( "===========\n\n" );
                 //
                 // Debug code goes here
-                //     
+                //  
+                /*   
+                System.out.println( problem.ReadPosition( problemNumber ));
+                System.out.println( problem.ReadMove( problemNumber ));
+                System.out.println( correctMove );
                 PrintPosition( fenString );
                 System.out.println( "\nfenPosition: " + fenPosition );
                 System.out.println( "turn: " + turn );
@@ -272,17 +285,23 @@ public class Game {
                 System.out.println( "halfMove: " + halfMove );
                 System.out.println( "fullMove: " + fullMove );
                 System.out.print( "\n" );
+                */
                 //
                 // End debug code
                 //
                 System.out.print( "\n===========\n\n" );
             }
-
-            PrintPosition_r( fenString, 0, 0 );
-            
-            if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
-            if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
-            System.out.println( " Which square is checkmate?" );
-            InputLoop();
+            while( problemNumber <= problem.FileSize()){
+                position = problem.ReadPosition( problemNumber );
+                correctMove = problem.ReadMove( problemNumber );
+                correctMove = problem.ReadSquare( correctMove );
+                fenString = FenParser( position ); 
+                PrintPosition_r( fenString, 0, 0 );
+                if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
+                if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
+                System.out.println( " Which square is checkmate?" );
+                InputLoop( correctMove );
+                problemNumber++;
+            }
         }
 }

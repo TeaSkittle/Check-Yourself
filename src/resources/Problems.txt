@@ -1,0 +1,3 @@
+1Q6/5pk1/2p3p1/1p2N2p/1b5P/1bn5/r5P1/2K5 b - - 15 41:rc2
+r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:Nf3
+r2qk2r/ppp1n2p/1bnpB2B/7N/1P1pb1P1/2P4P/P4P2/RN1Q1RK1 w - - 2 18:Nf6
