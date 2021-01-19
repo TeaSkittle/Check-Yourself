@@ -18,7 +18,7 @@ r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31
 
 then add the correct move to the end: nf3
 
-r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:nf3
+r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:Nf3
 ```
 
 Then add this string to file in the resources folder "Problems.txt", and now it has been added to the game. 
