@@ -21,8 +21,7 @@ import java.lang.*;
 import java.io.*;
 
 public class Game {
-                                                            // Int values for the pieces >= 10 for white, >= 20 for black
-        private final static int W_PAWN   = 11;             // White Pawn
+        private final static int W_PAWN   = 11;             // White Pawn   ** Int values for the pieces >= 10 for white, >= 20 for black
         private final static int W_KNIGHT = 12;             // White Knight
         private final static int W_BISHOP = 13;             // White Bishop
         private final static int W_ROOK   = 14;             // White Rook
@@ -34,8 +33,7 @@ public class Game {
         private final static int B_ROOK   = 24;             // Black Rook
         private final static int B_QUEEN  = 25;             // Black Queen
         private final static int B_KING   = 26;             // Black King         
-                                                            // ASCII Codes for the chess peices
-        private final static String W_PAWN_S   = "\u2659";  // White Pawn
+        private final static String W_PAWN_S   = "\u2659";  // White Pawn   ** ASCII Codes for the chess peices
         private final static String W_KNIGHT_S = "\u2658";  // White Knight
         private final static String W_BISHOP_S = "\u2657";  // White Bishop
         private final static String W_ROOK_S   = "\u2656";  // White Rook
@@ -47,18 +45,15 @@ public class Game {
         private final static String B_ROOK_S   = "\u265C";  // Back Rook
         private final static String B_QUEEN_S  = "\u265B";  // Black Queen
         private final static String B_KING_S   = "\u265A";  // Black King
-        private static String fenPosition;                  // the string of characters showing the position of the pieces in FEN
-        private static char   turn;                         // 0 = white, 1 = black
-        private static String castle;                       // 0 = white, 1 = black, 2 = neither can castle
-        private static String enPassant;                    // which square can be targetd with an En Passant ( ex "e3" )
-        private static int    halfMove;                     // Deals with 50-move rule, will most likely not be used in this program 
-        private static int    fullMove;                     // Incremented after every one of black's moves, will most likely not be used
-        private static String correctMove;                  // the square for checkmate, for example: "e5"
-        private static int problemNumber;                   // Which chess problem rhe user is currently on
-        
-        
-        private static Problem problem = new Problem();
-        
+        private static String  fenPosition;                 // the string of characters showing the position of the pieces in FEN
+        private static char    turn;                        // 0 = white, 1 = black
+        private static String  castle;                      // 0 = white, 1 = black, 2 = neither can castle
+        private static String  enPassant;                   // which square can be targetd with an En Passant ( ex "e3" )
+        private static int     halfMove;                    // Deals with 50-move rule, will most likely not be used in this program 
+        private static int     fullMove;                    // Incremented after every one of black's moves, will most likely not be used
+        private static String  correctMove;                 // the square for checkmate, for example: "e5"
+        private static int     problemNumber;               // Which chess problem rhe user is currently on
+        private static Problem problem = new Problem();     // Create a Problem object
         /*
         ====================
         Constructors
@@ -71,9 +66,36 @@ public class Game {
         }
         /*
         ====================
+        GetMove
+         Turn string for correct move into int[]. 
+         *** Not being used *** 
+        ====================
+        */
+        public static int[] GetMove( String input ){
+            int rank = 0;
+            int file = 0;
+            switch ( input.charAt( 0 )) {
+                case 'a': file = 1; break;
+                case 'b': file = 2; break;
+                case 'c': file = 3; break;
+                case 'd': file = 4; break;
+                case 'e': file = 5; break;
+                case 'f': file = 6; break;
+                case 'g': file = 7; break;
+                case 'h': file = 8; break;
+                default: System.out.println( "Please enter a proper value..." ); break;
+            } try { rank = ( input.charAt( 1 ) - '0' ); } 
+            catch ( StringIndexOutOfBoundsException e ) { e.printStackTrace(); }
+            int[] move = new int[ 2 ];
+            move[ 0 ] = file;
+            move[ 1 ] = rank;
+            return move;
+        }
+        /*
+        ====================
         PrintPosition
-         Print the int[][] position array as the actual int values,
-         to be use primarily for testing.
+         Print the int[][] position array as the actual int values, to be use primarily for testing.
+        *** Not being used *** 
         ====================
         */
         public static void PrintPosition( int[][] array ){
@@ -88,8 +110,7 @@ public class Game {
         /*
         ====================
         PrintPosition_r
-         Recursive version of PrintPosition that prints the array as
-         unicode chess symbols.
+         Recursive version of PrintPosition that prints the array as unicode chess symbols.
         ====================
         */
         public static int PrintPosition_r( int[][] array, int i, int j ){
@@ -201,35 +222,7 @@ public class Game {
         public static String GetInput(){
             Scanner input = new Scanner( System.in );
             System.out.print( "> " );
-            return input.nextLine().toLowerCase();
-        }
-        /*
-        ====================
-        GetMove
-         Turn string for correct move into int[]. 
-         *** Not being used *** 
-        ====================
-        */
-        public static int[] GetMove( String input ){
-            int rank = 0;
-            int file = 0;
-            switch ( input.charAt( 0 )) {
-                case 'a': file = 1; break;
-                case 'b': file = 2; break;
-                case 'c': file = 3; break;
-                case 'd': file = 4; break;
-                case 'e': file = 5; break;
-                case 'f': file = 6; break;
-                case 'g': file = 7; break;
-                case 'h': file = 8; break;
-                default: System.out.println( "Please enter a proper value..." ); break;
-            } try { rank = ( input.charAt( 1 ) - '0' ); } 
-            catch ( StringIndexOutOfBoundsException e ) { e.printStackTrace(); }
-            int[] move = new int[ 2 ];
-            move[ 0 ] = file;
-            move[ 1 ] = rank;
-            //System.out.println( "File: " + file + "\nRank: " + rank + "\nmove: " + move[ 0 ] + move[ 1 ]);
-            return move;
+            return input.nextLine();
         }
         /*
         ====================
@@ -240,18 +233,15 @@ public class Game {
         public static void InputLoop( String move ){
             while ( true ) {
                 String input = GetInput();
-                if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )) { System.exit( 0 ); }
+                if ( input.equals( "exit" ) || input.equals( "quit" ) || input.equals( "q" )
+                        || input.equals( "Exit" ) || input.equals( "Quit" ) || input.equals( "Q" )) { System.exit( 0 ); }
                 try {
                     if ( input.equals( move )) {
                         System.out.println( "Correct!\n " );
+                        problem.IncrementCurrent();
                         break;
-                    } else {
-                        System.out.println( "Try again...\n" );
-                    }
-                } catch ( NullPointerException e ) {
-                    e.printStackTrace();
-                }
-                
+                    } else { System.out.println( "Try again...\n" ); }
+                } catch ( NullPointerException e ) { e.printStackTrace(); }
             }
         }
         /*
@@ -261,47 +251,34 @@ public class Game {
         ====================
         */
         public static void main( String[] args ){
-            int DEBUG = 1;
-            int problemNumber = 1;
-            String position = problem.ReadPosition( problemNumber );
-            String correctMove = problem.ReadMove( problemNumber );
-            correctMove = problem.ReadSquare( correctMove );
-            int[][] fenString = FenParser( position );           
-            if ( DEBUG == 1 ){
+            int debug = 1;       
+            if ( debug == 1 ) {
+                //problem.WriteCurrent( 1 );
+                problemNumber = problem.ReadCurrent();
+                String position = problem.ReadPosition( problemNumber );
+                String correctMove = problem.ReadMove( problemNumber );
+                int[][] fenArray = FenParser( position ); 
                 System.out.print( "DEBUG INFO:\n"   );
                 System.out.print( "===========\n\n" );
                 //
                 // Debug code goes here
                 //  
-                /*   
-                System.out.println( problem.ReadPosition( problemNumber ));
-                System.out.println( problem.ReadMove( problemNumber ));
-                System.out.println( correctMove );
-                PrintPosition( fenString );
-                System.out.println( "\nfenPosition: " + fenPosition );
-                System.out.println( "turn: " + turn );
-                System.out.println( "castle: " + castle );
-                System.out.println( "enPassant: " + enPassant );
-                System.out.println( "halfMove: " + halfMove );
-                System.out.println( "fullMove: " + fullMove );
-                System.out.print( "\n" );
-                */
+                while ( problemNumber <= problem.FileSize() ) {
+                    position = problem.ReadPosition( problemNumber );
+                    correctMove = problem.ReadMove( problemNumber );
+                    fenArray = FenParser( position ); 
+                    PrintPosition_r( fenArray, 0, 0 );
+                    if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
+                    if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
+                    System.out.println( " Which move is checkmate?" );
+                    System.out.println( "**correctMove: " + correctMove );
+                    InputLoop( correctMove );
+                    problemNumber++;
+                }
                 //
                 // End debug code
                 //
                 System.out.print( "\n===========\n\n" );
-            }
-            while( problemNumber <= problem.FileSize()){
-                position = problem.ReadPosition( problemNumber );
-                correctMove = problem.ReadMove( problemNumber );
-                correctMove = problem.ReadSquare( correctMove );
-                fenString = FenParser( position ); 
-                PrintPosition_r( fenString, 0, 0 );
-                if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
-                if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
-                System.out.println( " Which square is checkmate?" );
-                InputLoop( correctMove );
-                problemNumber++;
             }
         }
 }

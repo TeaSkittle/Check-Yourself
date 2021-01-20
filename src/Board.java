@@ -10,7 +10,6 @@ Some idea to try:
   -  Create the board with a grid pane, or use a background image
 =========================================
  */
-
 package src;
 
 public class Board {

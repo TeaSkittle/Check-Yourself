@@ -41,3 +41,10 @@
   - Make fun and easy ones, examples:
     - Smothered mate
     - Mate by promotion
+
+  GUI Notes
+-------------
+- Great chess stock photos:
+  - https://www.pexels.com/search/chess/
+  - https://unsplash.com/s/photos/chess-piece
+  - 

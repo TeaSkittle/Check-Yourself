@@ -4,7 +4,8 @@
 
 - Designed for the casual player
 - The goal is to have 100 problems for the player to solve, increasing in difficulty over time
-- Will be getting the puzzles from actual chess games, mostly of grandmaster level
+- The player's progress persists throughout each launch, but can easily be reset or manually set via text
+- Plan on getting the puzzles from actual chess games, mostly of grandmaster level
 - Will be written using Java and JavaFX
 - Uses the FEN chess notation format, making the project easily extensible
 
@@ -23,3 +24,8 @@ r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:Nf3
 
 Then add this string to file in the resources folder "Problems.txt", and now it has been added to the game. 
 To play the problem find the linenumber where it was added ( Problems.txt ) and go to that problem number in the game.
+
+## Jumping to other puzzles
+
+- To go to a specific problem number, edit the int value to the problem number in Current.txt
+- To reset the game, change the int value in Current.txt to: 1

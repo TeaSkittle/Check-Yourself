@@ -6,7 +6,6 @@ Date: 1-7-2021
 This is what will be launched, since it is Main
 =========================================
  */
-
 package src;
 
 import javafx.application.Application;
@@ -23,7 +22,6 @@ public class Main extends Application {
         primaryStage.setScene( new Scene( pane, 800, 600 ));
         primaryStage.show();
     }
-
 
     public static void main( String[] args ) {
         launch( args );
