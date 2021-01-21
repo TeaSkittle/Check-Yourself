@@ -66,6 +66,23 @@ public class Game {
         }
         /*
         ====================
+        Getters 
+        ====================
+        */
+        public String GetWhitePawn()   { return this.W_PAWN_S; }
+        public String GetWhiteKnight() { return this.W_KNIGHT_S; }
+        public String GetWhiteBishop() { return this.W_BISHOP_S; }
+        public String GetWhiteRook()   { return this.W_ROOK_S; }
+        public String GetWhiteQueen()  { return this.W_QUEEN_S; }
+        public String GetWhiteKing()   { return this.W_KING_S; }
+        public String GetBlackPawn()   { return this.B_PAWN_S; }
+        public String GetBlackKnight() { return this.B_KNIGHT_S; }
+        public String GetBlackBishop() { return this.B_BISHOP_S; }
+        public String GetBlackRook()   { return this.B_ROOK_S; }
+        public String GetBlackQueen()  { return this.B_QUEEN_S; }
+        public String GetBlackKing()   { return this.B_KING_S; }
+        /*
+        ====================
         GetMove
          Turn string for correct move into int[]. 
          *** Not being used *** 
