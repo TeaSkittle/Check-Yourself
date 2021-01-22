@@ -23,44 +23,61 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.*;
+import javafx.scene.paint.Color;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 
 public class Main extends Application {
     public static final int SIZE = 8;
     private static Game game = new Game();
     private static Problem problem = new Problem();
-
+    
+    public static int problemNumber = problem.ReadCurrent();
+    public static String position = problem.ReadPosition( problemNumber );
+    public static String correctMove = problem.ReadMove( problemNumber );
+    public static int[][] fenArray = game.FenParser( position ); 
+    public static Label[][] labels = new Label[ SIZE ][ SIZE ];
+    
+    /*
+    ====================
+    Start
+     Display all the JavaFX stuff
+    ====================
+    */
     @Override
     public void start( Stage primaryStage ) throws Exception {
         BorderPane pane = new BorderPane();
         GridPane chessBoard = new GridPane();
+        TextField textField = new TextField();
+        Label textLabel = new Label( "Move: " );
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll( textLabel, textField );
+        hbox.setAlignment( Pos.CENTER );
+        hbox.setSpacing( 10 );
+        hbox.setPadding( new Insets( 0, 40, 50, 0 ));
         chessBoard.setAlignment( Pos.CENTER );
-        //chessBoard.setPadding(new Insets( 25,25,25,25 ));
-        
-        int problemNumber = problem.ReadCurrent();
-        String position = problem.ReadPosition( problemNumber );
-        String correctMove = problem.ReadMove( problemNumber );
-        int[][] fenArray = game.FenParser( position ); 
-        //game.PrintPosition( fenArray );
-        
-        Label[][] labels = new Label[ SIZE ][ SIZE ];
         for ( int i = 0; i < SIZE; i++ ) {
             for ( int j = 0; j < SIZE; j++ ) {
                 chessBoard.add( labels[ i ][ j ] = new Label(), j, i );
-                labels[ i ][ j ].setPrefSize( 55, 55 );
+                labels[ i ][ j ].setPrefSize( 37, 37 );
                 // Black squares
                 if ( i % 2 == 0 && j % 2 != 0 ) {
-                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: black" );
-                    labels[ i ][ j ] = new Label( "i");
+                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: Peru" );
                 }
                 if ( i % 2 != 0 && j % 2 == 0 ) {
-                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: black" );
+                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: Peru" );
                 }
                 // White squares
                 if ( i % 2 == 0 && j % 2 == 0 ) {
-                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: white" );
+                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: AntiqueWhite" );
                 }
                 if ( i % 2 != 0 && j % 2 != 0 ) {
-                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: white" );
+                    labels[ i ][ j ].setStyle( "-fx-border-color: black; -fx-background-color: AntiqueWhite" );
                 }
                 // Rank and file labels, makes more complex
                 // SIZE needs to be 9 which is a handful here
@@ -88,52 +105,105 @@ public class Main extends Application {
                     chessBoard.add( text, j, i );
                 }*/
             }    
-        }
-        // White pieces
-        Text whitePawn = new Text( game.GetWhitePawn() );
-        whitePawn.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text whiteKnight = new Text( game.GetWhiteKnight() );
-        whiteKnight.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text whiteBishop = new Text( game.GetWhiteBishop() );
-        whiteBishop.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text whiteRook = new Text( game.GetWhiteRook() );
-        whiteRook.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text whiteQueen = new Text( game.GetWhiteQueen() );
-        whiteQueen.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text whiteKing = new Text( game.GetWhiteKing() );
-        whiteKing.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        // Black pieces
-        Text blackPawn = new Text( game.GetBlackPawn() );
-        blackPawn.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text blackKnight = new Text( game.GetBlackKnight() );
-        blackKnight.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text blackBishop = new Text( game.GetBlackBishop() );
-        blackBishop.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text blackRook = new Text( game.GetBlackRook() );
-        blackRook.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text blackQueen = new Text( game.GetBlackQueen() );
-        blackQueen.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        Text blackKing = new Text( game.GetBlackKing() );
-        blackKing.setFont( Font.font("Tahoma", FontWeight.NORMAL, 45 ));
-        
-        //chessBoard.add( blackRook, 0, 0 );
-        //Group root = new Group();
-        for ( int i = 0; i < SIZE; i++ ) {
-            for ( int j = 0; j < SIZE; j++ ) {
-                if ( fenArray[ i ][ j ] == 11 ) {
-                    System.out.print( "11 " );
-                }
-            }
-        }
-        //labels[ i ][ j ] = new Label( game.GetWhitePawn() );
-        // Scene
-        Scene scene = new Scene( pane, 75 * SIZE, 75 * SIZE );
+        } PrintPieces( fenArray );
+        Scene scene = new Scene( pane, 60 * SIZE, 60 * SIZE );
         pane.setCenter( chessBoard );
+        pane.setBottom( hbox );
         primaryStage.setTitle( "Check Yourself" );
         primaryStage.setScene( scene );
         primaryStage.show();
     }
-
+    /*
+    ====================
+    PrintPieces
+     Print the pieces of the problem to the board, the numbers are inverted for some reason but it works.
+    ====================
+    */
+    private static void PrintPieces ( int[][] arr ) {
+        for ( int i = 0; i < SIZE; i++ ) {
+            for ( int j = 0; j < SIZE; j++ ) {
+                switch ( fenArray[ i ][ j ] ) {
+                    case 21: 
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whitepawn.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 22:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whiteknight.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 23:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whitebishop.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 24:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whiterook.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 25:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whitequeen.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 26:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/whiteking.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 11:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackpawn.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 12:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackknight.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 13:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackbishop.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 14:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackrook.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 15:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackqueen.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                    case 16:
+                        try {
+                            Image image = new Image( new FileInputStream ("resources/blackking.png") );
+                            labels[ i ][ j ].setGraphic( new ImageView( image ));
+                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+                        break;
+                }
+            }
+        }
+    }
+    /*
+    ====================
+    Main
+    ====================
+    */
     public static void main( String[] args ){
         launch( args );
     }
