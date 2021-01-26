@@ -148,7 +148,7 @@ public class Problem {
     ====================
     */
     public static void main( String[] args ){
-        problemNumber = 2;
+        problemNumber = 1;
         if ( problemNumber <= FileSize()) {
             System.out.println( "position: " + ReadPosition( problemNumber ));
             System.out.println( "correctMove: " + ReadMove( problemNumber ));

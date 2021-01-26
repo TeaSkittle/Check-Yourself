@@ -29,3 +29,8 @@ To play the problem find the linenumber where it was added ( Problems.txt ) and 
 
 - To go to a specific problem number, edit the int value to the problem number in Current.txt
 - To reset the game, change the int value in Current.txt to: 1
+
+## Credits 
+
+- Music: [Chris Zabriskie]https://chriszabriskie.bandcamp.com/
+- Text-to-Speech sound: https://ttsmp3.com/

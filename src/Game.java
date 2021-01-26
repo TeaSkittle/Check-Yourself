@@ -81,6 +81,7 @@ public class Game {
         public String GetBlackRook()   { return this.B_ROOK_S; }
         public String GetBlackQueen()  { return this.B_QUEEN_S; }
         public String GetBlackKing()   { return this.B_KING_S; }
+        public char GetTurn()          { return this.turn; }
         /*
         ====================
         GetMove
