@@ -32,5 +32,5 @@ To play the problem find the linenumber where it was added ( Problems.txt ) and 
 
 ## Credits 
 
-- Music: [Chris Zabriskie]https://chriszabriskie.bandcamp.com/
+- Music: [Chris Zabriskie](https://chriszabriskie.bandcamp.com/)
 - Text-to-Speech sound: https://ttsmp3.com/
