@@ -9,6 +9,16 @@
 - Will be written using Java and JavaFX
 - Uses the FEN chess notation format, making the project easily extensible
 
+## Gameplay
+
+The game assumes you know the rules of chess and can read basic chess notation. You can find tutorials on these below, and don't worry 
+chess is an easier game to learn than you think! Easy to learn, yet dificult to master.
+- [How to play](https://www.chess.com/learn-how-to-play-chess)
+- [Chess notation](https://www.chess.com/article/view/chess-notation)
+
+In this game you will be asked to enter in a move as chess notation, and to have the sides seperated white pieces are all uppercase 
+( P N B R Q K ) and black pieces are lowercase ( p n b r q k ). Other than that it is just normal notation and chess, I hope you enjoy!
+
 ## Adding Chess Problems
 
 To add your own chess problems, simply take any board position in the FEN format and afterwards add a colon and the correct move,
@@ -17,7 +27,7 @@ for example:
 ```
 r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31
 
-then add the correct move to the end: nf3
+then add the correct move to the end (followed by a colon) :nf3
 
 r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:Nf3
 ```
@@ -34,3 +44,5 @@ To play the problem find the linenumber where it was added ( Problems.txt ) and 
 
 - Music: [Chris Zabriskie](https://chriszabriskie.bandcamp.com/)
 - Text-to-Speech sound: https://ttsmp3.com/
+- Background photos: https://www.pexels.com/search/chess/
+- Photo editing: https://pixlr.com/

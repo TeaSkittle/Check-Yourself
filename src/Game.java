@@ -61,9 +61,6 @@ public class Game {
         ====================
         */
         public Game(){}
-        public Game( int[][] board ){
-            //this.board = board;
-        }
         /*
         ====================
         Getters 
@@ -271,7 +268,6 @@ public class Game {
         public static void main( String[] args ){
             int debug = 1;       
             if ( debug == 1 ) {
-                //problem.WriteCurrent( 1 );
                 problemNumber = problem.ReadCurrent();
                 String position = problem.ReadPosition( problemNumber );
                 String correctMove = problem.ReadMove( problemNumber );
