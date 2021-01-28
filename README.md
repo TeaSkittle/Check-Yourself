@@ -29,7 +29,7 @@ for example:
 ```
 r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31
 
-then add the correct move to the end (followed by a colon) :nf3
+then add the correct move to the end (following a colon) :nf3
 
 r1b1qr2/5pBp/2p1p3/p1PpP1R1/P2N1P1k/2P5/6PP/3n2K1 w - - 8 31:Nf3
 ```
