@@ -2,6 +2,8 @@
 
 > *Check Yourself* is a simple and minimalistic chess puzzle game where the player solves mate in one problems
 
+![start_screen](screenshots/start_screen) ![game_screen](screenshots/game_screen.png)
+
 - Designed for the casual player
 - The goal is to have 100 problems for the player to solve, increasing in difficulty over time
 - The player's progress persists throughout each launch, but can easily be reset or manually set via text
