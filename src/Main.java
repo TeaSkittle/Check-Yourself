@@ -137,6 +137,13 @@ public class Main extends Application {
         Label textLabel = new Label( "Move: " );
         Button button = new Button( "Submit" );
         HBox hbox = new HBox();
+        VBox vboxRight = new VBox();
+        ToggleButton soundButton = new ToggleButton( "Sound" );
+        ToggleButton musicButton = new ToggleButton( "Music" );
+        soundButton.setFont( new Font( "IBM Plex Sans", 16  ));
+        musicButton.setFont( new Font( "IBM Plex Sans", 16  ));
+        vboxRight.getChildren().addAll( soundButton, musicButton );
+        vboxRight.setPadding( new Insets( -40, 10, 0, 0 ));
         textLabel.setFont( font );
         textLabel.setStyle( "-fx-text-fill: white" );
         hbox.getChildren().addAll( textLabel, textField, button );
@@ -184,27 +191,49 @@ public class Main extends Application {
                 }
             }
         }); 
+        soundButton.setOnAction( e -> {
+            if ( sound == 1 ) { 
+                sound = 0; 
+            } else { 
+                sound = 1;
+            }
+        });
+        musicButton.setOnAction( e -> {
+            if ( music == 1 ) { 
+                music = 0;
+            } else { 
+                music = 1; 
+            }
+        });
         pane.setCenter( chessBoard );
         pane.setBottom( hbox );
         pane.setLeft( vbox );
         pane.setTop( topHbox );
+        pane.setRight( vboxRight );
         primaryStage.setScene( scene );
         primaryStage.show();
     }
     /*
     ====================
-    UpdateBoard
-     Clear and reprint the pieces with correct array, reassign values to match new problem, and play sound effect
+    PlayMusic
+     Play/Stop the music
+    
+    **buggy and needs works**
     ====================
     */
     private static void PlayMusic(){
         Media media = new Media( new File( "resources/music.mp3" ).toURI().toString() );
         MediaPlayer a = new MediaPlayer( media );
-        a.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                a.seek( Duration.ZERO );
-            }
-        }); a.play();
+        if ( music ==  1 ) {
+            a.setOnEndOfMedia(new Runnable() {
+                public void run() {
+                    a.seek( Duration.ZERO );
+                }
+            }); a.play(); 
+        } else if ( music == 0 ) {
+            a.stop();
+        }
+
     }
     /*
     ====================
