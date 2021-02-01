@@ -53,6 +53,8 @@ public class Main extends Application {
     public static Label vboxLabel = new Label( String.valueOf( problemNumber ));
     public static Label topHboxLabel = game.GetTurn() == 'w' ? new Label( "White to play" ) : new Label( "Black to play" );
     public static Font font = Font.font( "IBM Plex Sans", 24 );
+    public static Media musicMedia = new Media( new File( "resources/music.mp3" ).toURI().toString() );
+    public static MediaPlayer musicPlayer = new MediaPlayer( musicMedia );
     /*
     ====================
     Start
@@ -162,7 +164,7 @@ public class Main extends Application {
             ImageView image = new ImageView( new Image( new FileInputStream( "resources/game_bg.png" )));
             pane.getChildren().add( image );
         } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
-        if ( music == 1 ) { PlayMusic(); }
+        if ( music == 1 ) { musicPlayer.play(); }
         PrintBoard();
         PrintPieces( fenArray );
         textField.setOnAction( e -> {
@@ -201,8 +203,10 @@ public class Main extends Application {
         musicButton.setOnAction( e -> {
             if ( music == 1 ) { 
                 music = 0;
+                musicPlayer.stop();
             } else { 
                 music = 1; 
+                musicPlayer.play();
             }
         });
         pane.setCenter( chessBoard );
@@ -212,28 +216,6 @@ public class Main extends Application {
         pane.setRight( vboxRight );
         primaryStage.setScene( scene );
         primaryStage.show();
-    }
-    /*
-    ====================
-    PlayMusic
-     Play/Stop the music
-    
-    **buggy and needs works**
-    ====================
-    */
-    private static void PlayMusic(){
-        Media media = new Media( new File( "resources/music.mp3" ).toURI().toString() );
-        MediaPlayer a = new MediaPlayer( media );
-        if ( music ==  1 ) {
-            a.setOnEndOfMedia(new Runnable() {
-                public void run() {
-                    a.seek( Duration.ZERO );
-                }
-            }); a.play(); 
-        } else if ( music == 0 ) {
-            a.stop();
-        }
-
     }
     /*
     ====================
