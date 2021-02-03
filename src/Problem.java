@@ -33,8 +33,9 @@ public class Problem {
     ====================
     */
     public static int ReadCurrent(){
-        try {
-            BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FILE ));
+        try (InputStream inputStream = Problem.class.getResourceAsStream( CURRENT_FILE );
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            //BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FILE ));
             return Integer.parseInt( reader.readLine() );
         } catch ( FileNotFoundException e ) {
             e.printStackTrace();
@@ -80,8 +81,9 @@ public class Problem {
     ====================
     */
     public static String ReadPosition( int problem ){
-        try {
-            BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
+        try ( InputStream inputStream = Problem.class.getResourceAsStream( PROBLEMS_FILE );
+            BufferedReader reader = new BufferedReader(new InputStreamReader( inputStream ))) {
+            //BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
             for ( int i = 0; i < problem - 1; i++ ) { reader.readLine(); }
             String[] array = reader.readLine().split( ":" );
             return ( String ) array[ 0 ];
@@ -100,8 +102,9 @@ public class Problem {
     ====================
     */
     public static String ReadMove( int problem ){
-        try {
-            BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
+        try ( InputStream inputStream = Problem.class.getResourceAsStream( PROBLEMS_FILE );
+            BufferedReader reader = new BufferedReader(new InputStreamReader( inputStream ))) {
+            //BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
             for ( int i = 0; i < problem - 1; i++ ) { reader.readLine(); }
             String[] array = reader.readLine().split( ":" );
             return ( String ) array[ 1 ];
@@ -148,7 +151,7 @@ public class Problem {
     ====================
     */
     public static void main( String[] args ){
-        problemNumber = 40;
+        problemNumber = 41;
         if ( problemNumber <= FileSize()) {
             System.out.println( "position: " + ReadPosition( problemNumber ));
             System.out.println( "correctMove: " + ReadMove( problemNumber ));

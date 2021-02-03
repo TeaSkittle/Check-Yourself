@@ -7,6 +7,16 @@ This class file contains all of the JavaFX code  and is the main file to be laun
 
 Will look into creating an .exe for windows: 
   https://medium.com/mpercept-academy/how-to-make-a-executable-file-from-your-java-code-3f521938ae5c
+
+Todo: 
+    - Create proper jar. Run one directory above src:
+        $ jar cfe out.jar src.Main src/*.class
+        $ java -jar out.jar
+    - Change image files from File to use class diretory, done with audio and bg files
+      - https://www.baeldung.com/java-classpath-resource-cannot-be-opened
+      - https://stackoverflow.com/a/20451415    
+    - Fix piece souds, not playing everytime
+    - Double check to make sure music is looping
 =========================================
  */
 package src;
@@ -53,7 +63,9 @@ public class Main extends Application {
     public static Label vboxLabel = new Label( String.valueOf( problemNumber ));
     public static Label topHboxLabel = game.GetTurn() == 'w' ? new Label( "White to play" ) : new Label( "Black to play" );
     public static Font font = Font.font( "IBM Plex Sans", 24 );
-    public static Media musicMedia = new Media( new File( "resources/music.mp3" ).toURI().toString() );
+    public static final String MUSIC_FILE = "resources/music.mp3";
+    public static InputStream musicStream = Main.class.getResourceAsStream( MUSIC_FILE );
+    public static Media musicMedia = new Media(Main.class.getResource( MUSIC_FILE ).toString()); 
     public static MediaPlayer musicPlayer = new MediaPlayer( musicMedia );
     /*
     ====================
@@ -74,10 +86,10 @@ public class Main extends Application {
     private static void GameMenu( Stage primaryStage ){
         BorderPane pane = new BorderPane();
         Scene scene = new Scene( pane, 60 * SIZE, 60 * SIZE );
-        try {
-            ImageView image = new ImageView( new Image( new FileInputStream( "resources/menu_bg.png" )));
+        try ( InputStream inputStream = Main.class.getResourceAsStream( "resources/menu_bg.png" )) {
+            ImageView image = new ImageView( new Image( inputStream ));
             pane.getChildren().add( image );
-        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
+        } catch ( IOException ex ) { ex.printStackTrace(); }
         HBox hbox = new HBox();
         hbox.setAlignment( Pos.CENTER );
         hbox.setPadding( new Insets( 50, 0, 0, 0 ));
@@ -160,11 +172,13 @@ public class Main extends Application {
         topHbox.setAlignment( Pos.CENTER );
         topHbox.getChildren().add( topHboxLabel );
         chessBoard.setAlignment( Pos.CENTER );
-        try {
-            ImageView image = new ImageView( new Image( new FileInputStream( "resources/game_bg.png" )));
+        try ( InputStream inputStream = Main.class.getResourceAsStream( "resources/game_bg.png" )) {
+            ImageView image = new ImageView( new Image( inputStream ));
             pane.getChildren().add( image );
-        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); }
-        if ( music == 1 ) { musicPlayer.play(); }
+        } catch ( IOException ex ) { ex.printStackTrace(); }
+        if ( music == 1 ) { 
+            musicPlayer.play();             
+        }
         PrintBoard();
         PrintPieces( fenArray );
         textField.setOnAction( e -> {
@@ -174,9 +188,10 @@ public class Main extends Application {
                 UpdateBoard();
             } else {
                 if ( sound == 1 ){
-                    Media media = new Media( new File( "resources/piecesound.mp3" ).toURI().toString() );
-                    MediaPlayer mediaPlayer = new MediaPlayer( media );
-                    mediaPlayer.setAutoPlay( true );
+                    String SOUND_FILE = "resources/piecesound.mp3";
+                    Media soundMedia = new Media( Main.class.getResource( SOUND_FILE ).toString() );
+                    MediaPlayer soundPlayer = new MediaPlayer( soundMedia );
+                    soundPlayer.setAutoPlay( true );
                 }
             }
         }); 
@@ -187,9 +202,10 @@ public class Main extends Application {
                 UpdateBoard();
             } else {
                 if ( sound == 1 ){
-                    Media media = new Media( new File( "resources/piecesound.mp3" ).toURI().toString() );
-                    MediaPlayer mediaPlayer = new MediaPlayer( media );
-                    mediaPlayer.setAutoPlay( true );
+                    String SOUND_FILE = "resources/piecesound.mp3";
+                    Media soundMedia = new Media( Main.class.getResource( SOUND_FILE ).toString() );
+                    MediaPlayer soundPlayer = new MediaPlayer( soundMedia );
+                    soundPlayer.setAutoPlay( true );
                 }
             }
         }); 
@@ -241,7 +257,7 @@ public class Main extends Application {
         PrintBoard();
         PrintPieces( fenArray );
         if ( sound == 1 ){
-            Media media = new Media( new File( "resources/checkmate.mp3" ).toURI().toString() );
+            Media media = new Media( Main.class.getResource( "resources/checkmate.mp3" ).toString() );
             MediaPlayer mediaPlayer = new MediaPlayer( media );
             mediaPlayer.setAutoPlay( true );            
         }
