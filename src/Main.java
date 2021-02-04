@@ -10,13 +10,10 @@ Will look into creating an .exe for windows:
 
 Todo: 
     - Create proper jar. Run one directory above src:
-        $ jar cfe out.jar src.Main src/*.class
+        $ jar cfve out.jar src.Main src/*.class src/resources/*
         $ java -jar out.jar
-    - Change image files from File to use class diretory, done with audio and bg files
-      - https://www.baeldung.com/java-classpath-resource-cannot-be-opened
-      - https://stackoverflow.com/a/20451415    
-    - Fix piece souds, not playing everytime
-    - Double check to make sure music is looping
+    - Figure out where to place current on system, to be accessed from jar
+    - Check out writer.flush() in Problem
 =========================================
  */
 package src;
@@ -296,64 +293,65 @@ public class Main extends Application {
             for ( int j = 0; j < SIZE; j++ ) {
                 switch ( fenArray[ i ][ j ] ) {
                     case 21: 
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whitepawn.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whitePawnStream = Main.class.getResourceAsStream( "resources/whitepawn.png" );
+                        ImageView whitePawnImage = new ImageView( new Image( whitePawnStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whitePawnImage.getImage() ));
+                        break;
                     case 22:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whiteknight.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whiteKnightStream = Main.class.getResourceAsStream( "resources/whiteknight.png" );
+                        ImageView whiteKnightImage = new ImageView( new Image( whiteKnightStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whiteKnightImage.getImage() ));
+                        break;
                     case 23:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whitebishop.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whiteBishopStream = Main.class.getResourceAsStream( "resources/whitebishop.png" );
+                        ImageView whiteBishopImage = new ImageView( new Image( whiteBishopStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whiteBishopImage.getImage() ));
+                        break;
                     case 24:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whiterook.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whiteRookStream = Main.class.getResourceAsStream( "resources/whiterook.png" );
+                        ImageView whiteRookImage = new ImageView( new Image( whiteRookStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whiteRookImage.getImage() ));
+                        break;
                     case 25:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whitequeen.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whiteQueenStream = Main.class.getResourceAsStream( "resources/whitequeen.png" );
+                        ImageView whiteQueenImage = new ImageView( new Image( whiteQueenStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whiteQueenImage.getImage() ));
+                        break;
                     case 26:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/whiteking.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream whiteKingStream = Main.class.getResourceAsStream( "resources/whiteking.png" );
+                        ImageView whiteKingImage = new ImageView( new Image( whiteKingStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( whiteKingImage.getImage() ));
+                        break;
                     case 11:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/blackpawn.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream blackPawnStream = Main.class.getResourceAsStream( "resources/blackpawn.png" );
+                        ImageView blackPawnImage = new ImageView( new Image( blackPawnStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackPawnImage.getImage() ));
+                        break;
                     case 12:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/blackknight.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream blackKnightStream = Main.class.getResourceAsStream( "resources/blackknight.png" );
+                        ImageView blackKnightImage = new ImageView( new Image( blackKnightStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackKnightImage.getImage() ));
+                        break;
                     case 13:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/blackbishop.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream blackBishopStream = Main.class.getResourceAsStream( "resources/blackbishop.png" );
+                        ImageView blackBishopImage = new ImageView( new Image( blackBishopStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackBishopImage.getImage() ));
+                        break;
                     case 14:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/blackrook.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream blackRookStream = Main.class.getResourceAsStream( "resources/blackrook.png" );
+                        ImageView blackRookImage = new ImageView( new Image( blackRookStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackRookImage.getImage() ));
+                        break;
                     case 15:
-                        try {
-                            Image image = new Image( new FileInputStream ("resources/blackqueen.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
-                    case 16: try {
-                            Image image = new Image( new FileInputStream ("resources/blackking.png") );
-                            labels[ i ][ j ].setGraphic( new ImageView( image ));
-                        } catch ( FileNotFoundException ex ) { ex.printStackTrace(); } break;
+                        InputStream blackQueenStream = Main.class.getResourceAsStream( "resources/blackqueen.png" );
+                        ImageView blackQueenImage = new ImageView( new Image( blackQueenStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackQueenImage.getImage() ));
+                        break;
+                    case 16:
+                        InputStream blackKingStream = Main.class.getResourceAsStream( "resources/blackking.png" );
+                        ImageView blackKingImage = new ImageView( new Image( blackKingStream ));
+                        labels[ i ][ j ].setGraphic( new ImageView( blackKingImage.getImage() ));
+                        break;
                 }
             }
         }

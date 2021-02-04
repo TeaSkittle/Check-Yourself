@@ -11,10 +11,12 @@ package src;
 
 import java.util.*;
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class Problem {
     public static final String PROBLEMS_FILE = "resources/Problems.txt";  // File containing all FEN probelsm and correct moves
     public static final String CURRENT_FILE  = "resources/Current.txt";   // File holding an int value indicating which problem user is on
+    public static final String CURRENT_FULL = "/tmp/Current.txt";
     public static int problemNumber;
     /*
     ====================
@@ -33,9 +35,8 @@ public class Problem {
     ====================
     */
     public static int ReadCurrent(){
-        try (InputStream inputStream = Problem.class.getResourceAsStream( CURRENT_FILE );
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            //BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FILE ));
+        try ( InputStream inputStream = Problem.class.getResourceAsStream( CURRENT_FULL );
+                BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FULL))){
             return Integer.parseInt( reader.readLine() );
         } catch ( FileNotFoundException e ) {
             e.printStackTrace();
@@ -57,9 +58,11 @@ public class Problem {
     public static void WriteCurrent( int currentProblem ){
         if ( currentProblem <= FileSize()) {
             try {
-                FileWriter writer = new FileWriter( CURRENT_FILE, false );
+                FileWriter writer = new FileWriter( CURRENT_FULL, false );
                 writer.write( new Integer( currentProblem ).toString() );
                 writer.close();
+            } catch ( FileNotFoundException e ) {
+                e.printStackTrace();
             } catch ( IOException e ) {
                 e.printStackTrace();
             }
@@ -83,7 +86,6 @@ public class Problem {
     public static String ReadPosition( int problem ){
         try ( InputStream inputStream = Problem.class.getResourceAsStream( PROBLEMS_FILE );
             BufferedReader reader = new BufferedReader(new InputStreamReader( inputStream ))) {
-            //BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
             for ( int i = 0; i < problem - 1; i++ ) { reader.readLine(); }
             String[] array = reader.readLine().split( ":" );
             return ( String ) array[ 0 ];
@@ -104,7 +106,6 @@ public class Problem {
     public static String ReadMove( int problem ){
         try ( InputStream inputStream = Problem.class.getResourceAsStream( PROBLEMS_FILE );
             BufferedReader reader = new BufferedReader(new InputStreamReader( inputStream ))) {
-            //BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
             for ( int i = 0; i < problem - 1; i++ ) { reader.readLine(); }
             String[] array = reader.readLine().split( ":" );
             return ( String ) array[ 1 ];
@@ -133,8 +134,8 @@ public class Problem {
     ====================
     */
     public static int FileSize(){
-        try {
-            BufferedReader reader = new BufferedReader( new FileReader( PROBLEMS_FILE ));
+        try ( InputStream inputStream = Problem.class.getResourceAsStream( PROBLEMS_FILE );
+            BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ))) {
             int lines = 0;
             while ( reader.readLine() != null ) lines++;
             reader.close();
@@ -151,7 +152,7 @@ public class Problem {
     ====================
     */
     public static void main( String[] args ){
-        problemNumber = 41;
+        problemNumber = 54;
         if ( problemNumber <= FileSize()) {
             System.out.println( "position: " + ReadPosition( problemNumber ));
             System.out.println( "correctMove: " + ReadMove( problemNumber ));
