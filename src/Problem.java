@@ -4,7 +4,7 @@ By: Travis Dowd
 Date: 1-19-2021
 
 This class file is for the database storing and accesing of FEN positions an the thier solutions, also is the
-core for file handling in this project.
+core for file handling in this project. Run this file standalone to change int value in Current.txt.
 =========================================
 */
 package src;
@@ -60,6 +60,7 @@ public class Problem {
             try {
                 FileWriter writer = new FileWriter( CURRENT_FULL, false );
                 writer.write( new Integer( currentProblem ).toString() );
+                writer.flush();
                 writer.close();
             } catch ( FileNotFoundException e ) {
                 e.printStackTrace();
@@ -152,7 +153,7 @@ public class Problem {
     ====================
     */
     public static void main( String[] args ){
-        problemNumber = 54;
+        problemNumber = 98;
         if ( problemNumber <= FileSize()) {
             System.out.println( "position: " + ReadPosition( problemNumber ));
             System.out.println( "correctMove: " + ReadMove( problemNumber ));

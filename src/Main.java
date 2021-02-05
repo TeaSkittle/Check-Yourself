@@ -4,16 +4,6 @@ By: Travis Dowd
 Date: 1-7-2021
 
 This class file contains all of the JavaFX code  and is the main file to be launched
-
-Will look into creating an .exe for windows: 
-  https://medium.com/mpercept-academy/how-to-make-a-executable-file-from-your-java-code-3f521938ae5c
-
-Todo: 
-    - Create proper jar. Run one directory above src:
-        $ jar cfve out.jar src.Main src/*.class src/resources/*
-        $ java -jar out.jar
-    - Figure out where to place current on system, to be accessed from jar
-    - Check out writer.flush() in Problem
 =========================================
  */
 package src;
@@ -57,7 +47,7 @@ public class Main extends Application {
     public static GridPane chessBoard = new GridPane();
     public static VBox vbox = new VBox();
     public static HBox topHbox = new HBox();
-    public static Label vboxLabel = new Label( String.valueOf( problemNumber ));
+    public static Label vboxLabel = new Label( String.valueOf( problem.ReadCurrent() ));
     public static Label topHboxLabel = game.GetTurn() == 'w' ? new Label( "White to play" ) : new Label( "Black to play" );
     public static Font font = Font.font( "IBM Plex Sans", 24 );
     public static final String MUSIC_FILE = "resources/music.mp3";
@@ -92,7 +82,7 @@ public class Main extends Application {
         hbox.setPadding( new Insets( 50, 0, 0, 0 ));
         Text title = new Text();
         title.setText( "Check Yourself" );
-        title.setFont( new Font( "IBM Plex Sans", 42 ));
+        title.setFont( new Font( "IBM Plex Sans", 50 ));
         title.setFill( Color.WHITE );
         hbox.getChildren().add( title );
         VBox vbox = new VBox();
@@ -129,6 +119,44 @@ public class Main extends Application {
             }
         });
         vbox.getChildren().addAll( playButton, musicButton, soundButton );
+        pane.setCenter( vbox );
+        pane.setTop( hbox );
+        primaryStage.setTitle( "Check Yourself" );
+        primaryStage.setScene( scene );
+        primaryStage.show();
+    }
+    /*
+    ====================
+    GameOver
+     The screen after completing the game
+    ====================
+    */
+    public static void GameOver( Stage primaryStage ){
+        problem.WriteCurrent( 0 );
+        BorderPane pane = new BorderPane();
+        Scene scene = new Scene( pane, 60 * SIZE, 60 * SIZE );
+        try ( InputStream inputStream = Main.class.getResourceAsStream( "resources/final_bg.png" )) {
+            ImageView image = new ImageView( new Image( inputStream ));
+            pane.getChildren().add( image );
+        } catch ( IOException ex ) { ex.printStackTrace(); }
+        HBox hbox = new HBox();
+        hbox.setAlignment( Pos.CENTER );
+        hbox.setPadding( new Insets( 60, 0, 0, 0 ));
+        Text title = new Text();
+        title.setText( "Game Over" );
+        title.setFont( new Font( "IBM Plex Sans", 50 ));
+        title.setFill( Color.WHITE );
+        hbox.getChildren().add( title );
+        VBox vbox = new VBox();
+        vbox.setAlignment( Pos.CENTER );
+        vbox.setPadding( new Insets( -50, 0, 0, 0));
+        Button exitButton = new Button( "Exit" );
+        exitButton.setFont( font );
+        exitButton.setMaxWidth( 150 );
+        vbox.getChildren().addAll( exitButton );
+        exitButton.setOnAction( e -> {
+            primaryStage.close();
+        });
         pane.setCenter( vbox );
         pane.setTop( hbox );
         primaryStage.setTitle( "Check Yourself" );
@@ -182,7 +210,7 @@ public class Main extends Application {
             String inputString = textField.getText();
             textField.clear();
             if ( inputString.equals( correctMove )) {
-                UpdateBoard();
+                UpdateBoard( primaryStage );
             } else {
                 if ( sound == 1 ){
                     String SOUND_FILE = "resources/piecesound.mp3";
@@ -196,7 +224,7 @@ public class Main extends Application {
             String inputString = textField.getText();
             textField.clear();
             if ( inputString.equals( correctMove )) {
-                UpdateBoard();
+                UpdateBoard( primaryStage );
             } else {
                 if ( sound == 1 ){
                     String SOUND_FILE = "resources/piecesound.mp3";
@@ -236,7 +264,8 @@ public class Main extends Application {
      Clear and reprint the pieces with correct array, reassign values to match new problem, and play sound effect
     ====================
     */
-    private static void UpdateBoard(){
+    private static void UpdateBoard( Stage primaryStage ){
+        if ( problem.ReadCurrent() >= problem.FileSize() ) { GameOver( primaryStage ); }
         problem.IncrementCurrent();
         problemNumber = problem.ReadCurrent();
         position = problem.ReadPosition( problemNumber );
@@ -253,7 +282,7 @@ public class Main extends Application {
         topHbox.getChildren().add( topHboxLabel );
         PrintBoard();
         PrintPieces( fenArray );
-        if ( sound == 1 ){
+        if ( sound == 1 ) {
             Media media = new Media( Main.class.getResource( "resources/checkmate.mp3" ).toString() );
             MediaPlayer mediaPlayer = new MediaPlayer( media );
             mediaPlayer.setAutoPlay( true );            

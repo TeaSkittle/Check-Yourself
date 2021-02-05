@@ -6,12 +6,6 @@ Date: 1-27-2021
 This file is for the core logic of the game, meant to be ran without GUI and to be used in a GUI program. 
 This should run the entire game as a TUI program first, then once that is working move on to creating a 
 GUI with this class file used as the core game logic.
-
-Notes:
-    - Will try to avoid using void methods
-    - Use recursion where possible and helpful
-    - Using switch/case over multiple if/else when needed
-    - Following John Carmack's DOOM 3 code style: https://fabiensanglard.net/fd_proxy/doom3/CodeStyleConventions.pdf
 =========================================
  */
 package src;

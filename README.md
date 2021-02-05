@@ -5,11 +5,11 @@
 ![start_screen](screenshots/start_screen.png) ![game_screen](screenshots/game_screen.png)
 
 - Designed for the casual player
-- The goal is to have 100 problems for the player to solve, increasing in difficulty over time
-- The player's progress persists throughout each launch, but can easily be reset or manually set via text
-- Plan on getting the puzzles from actual chess games, mostly of grandmaster level
-- Will be written using Java and JavaFX
-- Uses the FEN chess notation format, making the project easily extensible
+- Contains 98 problems for the players to solve
+- The player's progress persists throughout each launch, is reset after player reaches end of game
+- Majority of the puzzles are from actual chess games, mostly of grandmaster level
+- Uses the FEN chess notation format: [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)
+- Runs on MacOS (have not desinged for Windows, and have not tested on Linux)
 
 ## Gameplay
 
