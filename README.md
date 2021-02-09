@@ -11,6 +11,15 @@
 - Uses the FEN chess notation format: [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)
 - Runs on MacOS (have not desinged for Windows, and have not tested on Linux)
 
+## Install
+
+To install on MacOS, run:
+```Bash
+git clone https://github.com/TeaSkittle/ITEC_2905_Capstone
+cd ITEC_2905_Capstone
+sh Install.sh
+```
+
 ## Gameplay
 
 The game assumes you know the rules of chess and can read basic chess notation. You can find tutorials on these below, and don't worry 
@@ -39,8 +48,7 @@ To play the problem find the linenumber where it was added ( Problems.txt ) and 
 
 ## Jumping to other puzzles
 
-- To go to a specific problem number, edit the int value to the problem number in Current.txt
-- To reset the game, change the int value in Current.txt to: 1
+- To go to a specific problem number, edit the int value to the problem number in src/resources/Current.txt and run Install.sh again
 
 ## Credits 
 

@@ -1,6 +1,10 @@
 #!/bin/bash
-# Create jar file, and create /tmp/Current.txt
+# By: Travis Dowd
+# Date: 2-9-2021
+#
+# Create jar file, and create /tmp/Current.txt, and run game
 
-echo "1" > /tmp/Current.txt
+cat src/resources/Current.txt > /tmp/Current.txt
+javac src/*.java
 jar cfe CheckYourself.jar src.Main src/*.class src/resources/*
-echo "To run: java -jar CheckYourself.jar"
+java -jar CheckYourself.jar 
