@@ -20,7 +20,7 @@ cd ITEC_2905_Capstone
 sh Install.sh
 ```
 
-To install of Windows, run:
+To install on Windows, run:
 ```Bash
 git clone https://github.com/TeaSkittle/ITEC_2905_Capstone
 cd ITEC_2905_Capstone
