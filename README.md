@@ -22,6 +22,8 @@ sh Install.sh
 
 To install on Windows, run:
 ```Bash
+# WARNING!
+# Currently testing, does not work as of yet
 git clone https://github.com/TeaSkittle/ITEC_2905_Capstone
 cd ITEC_2905_Capstone
 Install.bat
