@@ -9,7 +9,7 @@
 - The player's progress persists throughout each launch, is reset after player reaches end of game
 - Majority of the puzzles are from actual chess games, mostly of grandmaster level
 - Uses the FEN chess notation format: [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)
-- Runs on MacOS (have not desinged for Windows, and have not tested on Linux)
+- Runs on MacOS (currently testing the windows version)
 
 ## Install
 
@@ -18,6 +18,13 @@ To install on MacOS, run:
 git clone https://github.com/TeaSkittle/ITEC_2905_Capstone
 cd ITEC_2905_Capstone
 sh Install.sh
+```
+
+To install of Windows, run:
+```Bash
+git clone https://github.com/TeaSkittle/ITEC_2905_Capstone
+cd ITEC_2905_Capstone
+Install.bat
 ```
 
 ## Gameplay

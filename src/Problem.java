@@ -15,9 +15,10 @@ import java.nio.charset.Charset;
 
 public class Problem {
     public static final String PROBLEMS_FILE = "resources/Problems.txt";  // File containing all FEN probelsm and correct moves
-    public static final String CURRENT_FILE  = "resources/Current.txt";   // File holding an int value indicating which problem user is on
-    public static final String CURRENT_FULL = "/tmp/Current.txt";
+    public static final String CURRENT_FILE = IsMac() || IsUnix() ? "/tmp/Current.txt" 
+            : "C:\\Current.txt"; // File holding an int value indicating which problem user is on
     public static int problemNumber;
+    public static String os;
     /*
     ====================
     Constructors
@@ -35,8 +36,8 @@ public class Problem {
     ====================
     */
     public static int ReadCurrent(){
-        try ( InputStream inputStream = Problem.class.getResourceAsStream( CURRENT_FULL );
-                BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FULL))){
+        try ( InputStream inputStream = Problem.class.getResourceAsStream( CURRENT_FILE );
+                BufferedReader reader = new BufferedReader( new FileReader( CURRENT_FILE))){
             return Integer.parseInt( reader.readLine() );
         } catch ( FileNotFoundException e ) {
             e.printStackTrace();
@@ -58,7 +59,7 @@ public class Problem {
     public static void WriteCurrent( int currentProblem ){
         if ( currentProblem <= FileSize()) {
             try {
-                FileWriter writer = new FileWriter( CURRENT_FULL, false );
+                FileWriter writer = new FileWriter( CURRENT_FILE, false );
                 writer.write( new Integer( currentProblem ).toString() );
                 writer.flush();
                 writer.close();
@@ -148,12 +149,30 @@ public class Problem {
     }
     /*
     ====================
+     OS Tools
+    ====================
+    */
+    public static String GetOs(){
+        if ( os == null ) { os = System.getProperty( "os.name" ); }
+        return os;
+    }
+    public static boolean IsWindows(){
+        return GetOs().startsWith( "Windows" );
+    }
+    public static boolean IsMac(){
+        return GetOs().startsWith( "Mac" );
+    }
+    public static boolean IsUnix() {
+        return (GetOs().contains("nix") || GetOs().contains("nux") || GetOs().contains("aix"));
+    }
+    /*
+    ====================
     Main
      Main method to run as a stand alone program and used for testing without a GUI.
     ====================
     */
     public static void main( String[] args ){
-        problemNumber = 98;
+        problemNumber = 1;
         if ( problemNumber <= FileSize()) {
             System.out.println( "position: " + ReadPosition( problemNumber ));
             System.out.println( "correctMove: " + ReadMove( problemNumber ));
@@ -161,6 +180,10 @@ public class Problem {
             WriteCurrent( problemNumber );
             int currentProblem = ReadCurrent();
             System.out.println( "ReadCurrent: " + currentProblem );
+            System.out.println( "OS: " + GetOs() );
+            System.out.println( "IsWindows: " + IsWindows() );
+            System.out.println( "IsMac: " + IsMac() );
+            System.out.println( "IsUnix: " + IsUnix() );
         } 
     }
 }
