@@ -279,7 +279,7 @@ public class Game {
                     if ( turn == 'b' ) { System.out.print( "\nBack to play."  ); }
                     if ( turn == 'w' ) { System.out.print( "\nWhite to play." ); }
                     System.out.println( " Which move is checkmate?" );
-                    System.out.println( "**correctMove: " + correctMove );
+                    //System.out.println( "**correctMove: " + correctMove );
                     InputLoop( correctMove );
                     problemNumber++;
                 }
